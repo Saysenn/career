@@ -19,22 +19,11 @@ docker login
 ### 2.1 Install Docker
 
 ```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y ca-certificates curl gnupg
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
-sudo systemctl enable docker && sudo systemctl start docker
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
 ```
 
-### 2.2 Install Docker Compose
-
-```bash
-sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-docker-compose --version
-```
+> Docker Compose v2 is included — no separate install needed. Use `docker compose` (no hyphen).
 
 ### 2.3 Log In to Docker Hub on VPS
 
@@ -42,12 +31,12 @@ docker-compose --version
 docker login
 ```
 
-### 2.4 Create docker-compose.yml
+### 2.4 Create docker compose.yml
 
-Create this file in `/home/your-user/app/docker-compose.yml`:
+Create this file in `/home/your-user/app/docker compose.yml`:
 
 ```bash
-mkdir -p ~/app && nano ~/app/docker-compose.yml
+mkdir -p ~/app && nano ~/app/docker compose.yml
 ```
 
 Paste the following:
@@ -132,19 +121,15 @@ Certificates are saved to `/etc/letsencrypt/live/yourdomain.com/`
 ### 2.8 Configure Firewall (UFW)
 
 ```bash
-sudo ufw allow 22
-sudo ufw allow 80
-sudo ufw allow 443
-sudo ufw enable
-sudo ufw status
+sudo ufw allow 22 && sudo ufw allow 80 && sudo ufw allow 443 && sudo ufw enable
 ```
 
 ### 2.9 Start Everything
 
 ```bash
 cd ~/app
-docker-compose pull
-docker-compose up -d
+docker compose pull
+docker compose up -d
 ```
 
 ---
@@ -170,8 +155,8 @@ docker push your-username/your-app:latest
 ```bash
 ssh user@your-vps-ip
 cd ~/app
-docker-compose pull
-docker-compose up -d
+docker compose pull
+docker compose up -d
 ```
 
 ---
