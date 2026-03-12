@@ -1,0 +1,51 @@
+name: Zero Downtime Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /root/var/www/html
+
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git .
+            else
+              git fetch origin
+              git reset --hard origin/main
+            fi
+
+            npm install
+            npm audit fix || true
+            npm run build
+
+            RELEASE_DIR=/var/www/releases/$(date +%Y%m%d%H%M%S)
+            mkdir -p $RELEASE_DIR
+            cp -r dist/* $RELEASE_DIR/
+
+            ln -sfn $RELEASE_DIR /var/www/current
+
+
+            name 
+            on 
+            push
+            branches:
+            workflow_dispatch
+
+            jobs:
+            deploy:
+            runs_on:
+            steps:
+            -name

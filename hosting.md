@@ -23,3 +23,5 @@
     - add cname
     - add mx > smtp.google.com
 7. now use hostinger nameservers in squarespace nameservers
+
+
